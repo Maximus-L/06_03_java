@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    # TODO: укажите нужные permissions для GITHUB_TOKEN
+    permissions:
+      # укажите_название: read
+      # укажите_название: write
+      actions: read
+      attestations: write
+      checks: write
+      contents: read
+      deployment: write
+      id-token: write
+      issues: write
+      packages: write
+      pull-requests: write
+      statuses: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      # TODO: укажите нужные значения для action setup-java
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'Temurin'
+          java-version: '17'
+      - name: Build & Deploy
+        run:
+          mvn -B deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
